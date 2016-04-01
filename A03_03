@@ -1,0 +1,104 @@
+#include <iostream>
+#include <string>
+#include <queue>
+#include <stdio.h>
+#include <string.h>
+
+using namespace std;
+
+
+int main(){
+    int caseNum;
+    string line;
+    getline(cin, line);
+    caseNum = line[0] - '0';
+    
+    for (int n = 0; n<caseNum;n++){
+    cout << "Case "<<(n+1)<<": ";
+	int visited[90];
+	queue<int> myQueue;
+	int dest;
+	bool found = false;
+	
+	memset(visited, 0, sizeof(visited));
+	for (int i = 0; i < 8; i++){
+		
+		getline(cin, line);
+		for (int j = 0; j < 8; j++){
+			if (line[j] == '#'){
+				visited[i * 10 + j] = 1;
+				myQueue.push(i * 10 + j);
+			}
+			if (line[j] == '-')
+				visited[i * 10 + j] = 0;
+			if (line[j] == '*')
+				visited[i * 10 + j] = -1;
+			if (line[j] == '@')
+				dest = i * 10 + j;
+		}
+}
+		while (!myQueue.empty()){
+			int x = myQueue.front();
+			myQueue.pop();
+			int step = visited[x];
+			if (x == dest)
+			{
+				cout <<(step-1)<<endl;
+				found = true;
+				break;
+			}
+
+			if ((x - 21)/10 >= 0 && (x - 21)/10 < 8 && (x - 21)%10 >= 0 && (x - 21)%10 < 8&&visited[(x - 21)] == 0){
+				myQueue.push((x - 21));
+				visited[(x - 21)] = (step + 1);
+			}
+
+			if ((x - 12)/10 >= 0 && (x - 12)/10 < 8 && (x - 12)%10 >= 0 && (x - 12)%10< 8  && visited[(x - 12)] == 0){
+				myQueue.push((x - 12));
+				visited[(x - 12)] = (step + 1);
+			}
+
+			if ((x + 8)/10 >= 0 && (x + 8)/10 < 8 && (x + 8)%10 >= 0 && (x + 8)%10 < 8&& visited[(x + 8)] == 0){
+				myQueue.push((x + 8));
+				visited[(x + 8)] = (step + 1);
+			}
+
+			if ((x + 19)/10 >= 0 && (x + 19)/10 < 8 && (x + 19)%10 >= 0 && (x + 19)%10< 8 && visited[(x + 19)] == 0){
+				myQueue.push((x + 19));
+				visited[(x + 19)] = (step + 1);
+			}
+
+			if ((x + 21)/10 >= 0 && (x + 21)/10 < 8 && (x + 21)%10 >= 0 && (x + 21)%10 < 8 && visited[(x + 21)] == 0){
+				myQueue.push((x + 21));
+				visited[(x + 21)] = (step + 1);
+			}
+
+			if ((x + 12)/10 >= 0 && (x + 12)/10 < 8 && (x + 12)%10 >= 0 && (x + 12)%10 < 8 && visited[(x + 12)] == 0){
+				myQueue.push((x + 12));
+				visited[(x + 12)] = (step + 1);
+			}
+
+			if ((x - 8)/10 >= 0 && (x - 8)/10 < 8 && (x - 8)%10 >= 0 && (x - 8)%10< 8 && visited[(x - 8)] == 0){
+				myQueue.push((x - 8));
+				visited[(x - 8)] = (step + 1);
+			}
+
+			if ((x - 19)/10 >= 0 && (x - 19)/10 < 8 && (x - 19)%10 >= 0 && (x - 19)%10 < 8 && visited[(x - 19)] == 0){
+				myQueue.push((x - 19));
+				visited[(x - 19)] = (step + 1);
+			}
+
+
+		}
+		if(!found)
+		    cout<<"IMPOSSIBLE"<<endl;
+		    
+		 getline(cin, line);
+}
+
+	}
+
+
+
+
+
