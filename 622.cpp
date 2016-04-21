@@ -1,3 +1,14 @@
+/*****************************************
+ * (This comment block is added by the Judge System)
+ * Submission ID: 24803
+ * Submitted at:  2016-04-14 21:31:17
+ *
+ * User ID:       146
+ * Username:      53546028
+ * Problem ID:    622
+ * Problem Name:  GATTACA
+ */
+
 #include <iostream>
 #include <string>
 #include <algorithm>

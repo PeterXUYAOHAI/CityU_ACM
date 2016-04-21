@@ -1,121 +1,79 @@
 /*****************************************
  * (This comment block is added by the Judge System)
- * Submission ID: 20554
- * Submitted at:  2016-01-31 23:58:12
+ * Submission ID: 21572
+ * Submitted at:  2016-02-20 13:08:19
  *
  * User ID:       146
  * Username:      53546028
- * Problem ID:    688
- * Problem Name:  Playing Chess
+ * Problem ID:    689
+ * Problem Name:  Rising Trend
  */
 
-#include<iostream>
-
-
-#include<string>
-#include<string.h>
+#include <iostream>
+#include <string>
 
 using namespace std;
 
+int searchUpper(int d[], int length, int key){
+	int mid;
+	int upper = length - 1;
+	int lower = 0;
+	if (d[length - 1]<=key)
+		return length;
 
-char chessM[8][8];
-int steps[8][8];
+	while (1){
+		mid = (upper + lower) / 2;
+		if ((upper - lower) <= 1){
+			return upper;
+		}
+		if (d[mid] < key){
+			lower = mid;
+		}
 
-int main()
-{
-    int caseSum;
-    int dest=0;
-    cin >> caseSum;
-    char temp;
-    int known[100] = {0}, store_known[100] = {0};
-    
-    for(int caseNum = 0; caseNum<caseSum ; caseNum++)
-    {
-        for(int i=0; i< 8; i++)
-            for (int j =0; j<8 ;j++)
-            {
-                cin >> temp;
-                chessM[i][j] = temp;
-                switch (temp)
-                {
-                    case '#': {
-                        steps [i][j] = 0;
-                        known[0] = i*9+j + 1; // 1 to 64
-                        break;
-                    }
-                    case '@': {
-                        dest = i*9+j+1;
-                        steps [i][j] = 99999;
-                        break;
-                    }
-                    case '-': steps [i][j] = 99999; break;
-                    case '*': steps [i][j] = -1; break;
-                }
-            }
-        
-       
-        while (known [0] != 0)
-        {
-            int count = 0;
-            for(int i=0; i< 100; i++)
-            {
-                if (known[i] == 0) break;
-                int row = known[i]/9, col = known[i]%9 -1, new_row=0, new_col=0;
-                bool get;
-                
-                
-                
-                for (int z=0; z< 8 ;z++)
-                {
-                    
-                    switch (z)
-                    {
-                    case 0: new_row = row + 1; new_col = col +2; break;
-                    case 1: new_row = row - 1; new_col = col +2; break;
-                        
-                    case 2: new_row = row + 1; new_col = col -2; break;
-                        
-                    case 3: new_row = row - 1; new_col = col -2;break;
-                    
-                    case 4: new_row = row + 2; new_col = col +1;break;
-                
-                    case 5: new_row = row - 2; new_col = col +1;break;
-                
-                    case 6: new_row = row + 2; new_col = col -1;break;
-                    
-                    case 7: new_row = row - 2; new_col = col -1;break;
-                    }
-                    
-                    get = (new_row > -1 && new_row < 8 && new_col > -1 && new_col < 8);
-                    
+		if (d[mid]>key){
+			upper = mid;
+		}
 
-                    if (steps[row][col] + 1 < steps[new_row][new_col] && get)
-                    {
-                        store_known[count++] = new_row *9 +new_col + 1;
-                        
-                       
-                        steps[new_row][new_col] = steps[row][col] + 1;
-                    }
-                }
-            }
-            
-
-            
-            for(int i=0; i< 100; i++)
-            {
-                known[i] = store_known[i];
-                store_known[i] = 0;
-            }
-  
-            
+		if (d[mid] == key ){
+		    if(d[mid+1]>key)
+			    return mid+1;
+			else 
+			    lower=mid;
         }
-        
-        
-       if (steps [dest/9] [dest%9 -1] == 99999)
-        cout << "Case " << caseNum+1 <<": " << "IMPOSSIBLE" << endl;
-       else
-        cout << "Case " << caseNum+1 <<": " << steps [dest/9] [dest%9 -1]<< endl;
-    }
-    return 0;
+	}
+
+}
+
+int main(){
+	int length;
+
+	while (cin >> length){
+		int a[1000001];
+		int dp[1000001];
+		for (int i = 0; i < length; i++){
+			cin>>a[i];
+		}
+		int len = 1;
+		dp[0] = 0;
+		dp[1] = a[0];
+		for (int i = 1; i < length; i++){
+			int pos = searchUpper(dp, len+1, a[i]);
+			dp[pos] = a[i];
+
+
+			if (pos>len)
+				len = pos;
+		}
+
+
+//		int max = 0;
+//		for (int i = 0; i < length; i++)
+//		{
+//			max = max>dp[i] ? max : dp[i];
+//		}
+		cout << len<<endl;
+	}
+
+
 
 }

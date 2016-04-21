@@ -1,90 +1,106 @@
 /*****************************************
  * (This comment block is added by the Judge System)
- * Submission ID: 21575
- * Submitted at:  2016-02-20 15:26:01
+ * Submission ID: 23412
+ * Submitted at:  2016-03-16 19:44:00
  *
  * User ID:       146
  * Username:      53546028
- * Problem ID:    318
- * Problem Name:  Obstacle Course
+ * Problem ID:    356
+ * Problem Name:  Poor Trade Advisor (UVa 11749)
  */
 
 #include <iostream>
 #include <string>
-#include <queue>
-#include <stdio.h>
-#include <string.h>
 
 using namespace std;
 
-	int dx[4] ={0,1,0,-1};
-	int dy[4] ={1,0,-1,0};
 
-struct node  
-{  
-    int x, y;  
-    int dis;  
-    bool operator<(const node &s)const  
-    {  
-        return dis > s.dis;  
-    }  
-}; 
+int A[510][510];
+int set[510];
 
 
+
+
+int Find(int e){
+	if (set[e]<0)
+		return e;
+	else
+		return set[e] = Find(set[e]);
+}
+
+
+void UnionSet(int r1, int r2){
+	set[r1] += set[r2];
+	set[r2] = r1;
+
+}
+
+
+void Union (int e1, int e2){
+	int r1 = Find(e1);
+	int r2 = Find(e2);
+	if(r1==r2)
+		return;
+
+	if(r1<r2)
+		UnionSet(r1,r2);
+	else
+		UnionSet(r2,r1);
+}
 
 
 int main(){
-    int	map[200][200];
-	int visited[200][200];
-	 
-    int pro=0;
 
-	int width;
-	priority_queue<node> queue;
-
-	while(++pro){
-	cin >> width;
-	if(width == 0)
-		break;
+	int city, pair;
+	int visited[510][510];
 	
-	memset(visited,-1,sizeof(visited)); 
-	for (int i=0; i<width; i++)
-		for (int j=0; j<width; j++)
-			cin>>map[i][j];
-		
-	node n;
-	n.x = 0; n.y=0; n.dis=map[0][0];
-    visited[0][0] = map[0][0];
-	queue.push(n);
-
-	 while(!queue.empty()){
-	 	node pre = queue.top();
-	 	queue.pop();
-		
-		
-
-		for(int i=0; i<4;i++){
-			int xx = pre.x+dx[i];
-			int yy = pre.y+dy[i];
-
-			if(xx>=0&&xx<width&&yy>=0&&yy<width){
-			    
-				if(visited[xx][yy]==-1||visited[xx][yy]>(pre.dis+map[xx][yy])){\
-					node next;
-					next.x = xx;
-					next.y = yy;
-					next.dis = pre.dis+map[xx][yy];
-					visited[xx][yy] = pre.dis+map[xx][yy];
-					queue.push(next);
-				}
-			} 
-
+	while (true){
+	cin>>city>>pair;
+	if (city ==0 &&pair==0)
+	    break;
+	int max = -2147483648;
+	for(int i=1;i<=city;i++)
+		for(int j=1; j<=city;j++){
+			A[i][j] = -2147483648;
+			visited[i][j] = -1;
 		}
 
-		
+	while (pair--){
+		int s,d,ppa;
+		cin>>s>>d>>ppa;
 
-	 }
-	 cout<<"Problem "<<pro<<": "<<visited[width-1][width-1]<<endl;
+		if (ppa>max)
+			max = ppa;
+		if(ppa>A[s][d])
+		    A[s][d] = ppa;
+		    
+		visited[s][d] = 1;
+	}
+//	cout<<max<<endl;
+
+	for(int i=1; i<=city; i++)
+		set[i] = -1;
+
+	for(int i=1;i<=city;i++)
+		for(int j=1; j<=city;j++){
+			if (visited[i][j]==1&&A[i][j]==max){
+//			    cout<<i<<" "<<j<<endl;
+				Union(i,j);
+			}
+		}
+
+	int maxCity = 0;
+	for(int i=1; i<=city; i++){
+//	    cout<<set[i]<<endl;
+		if (set[i]<0 && -set[i]>maxCity)
+			maxCity=-set[i];
+	}
+
+	cout<<maxCity<<endl;
+
 
 }
+
+
+
 }

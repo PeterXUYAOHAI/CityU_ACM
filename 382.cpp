@@ -1,3 +1,14 @@
+/*****************************************
+ * (This comment block is added by the Judge System)
+ * Submission ID: 24075
+ * Submitted at:  2016-03-30 23:45:31
+ *
+ * User ID:       146
+ * Username:      53546028
+ * Problem ID:    382
+ * Problem Name:  Power Transmission (UVa 10330)
+ */
+
 #include <iostream>
 #include <string>
 #include <string.h>

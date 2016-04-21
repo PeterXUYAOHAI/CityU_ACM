@@ -1,3 +1,14 @@
+/*****************************************
+ * (This comment block is added by the Judge System)
+ * Submission ID: 21425
+ * Submitted at:  2016-02-17 23:09:54
+ *
+ * User ID:       146
+ * Username:      53546028
+ * Problem ID:    9
+ * Problem Name:  String Computer
+ */
+
 #include <iostream>
 #include <string>
 

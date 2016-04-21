@@ -1,123 +1,163 @@
 /*****************************************
  * (This comment block is added by the Judge System)
- * Submission ID: 20212
- * Submitted at:  2016-01-28 23:35:11
+ * Submission ID: 24075
+ * Submitted at:  2016-03-30 23:45:31
  *
  * User ID:       146
  * Username:      53546028
- * Problem ID:    381
- * Problem Name:  Hexadecimal Calculation
+ * Problem ID:    382
+ * Problem Name:  Power Transmission (UVa 10330)
  */
 
 #include <iostream>
 #include <string>
-#include <stack>
+#include <string.h>
+#include <queue>
 
 using namespace std;
 
-int priority(char a){
-	int temp;
-	if (a == '(')
-		temp = 1;
-	else if (a == '*')
-		temp = 2;
-	else if (a == '+')
-		temp = 3;
-	return temp;
+int regs[210];
+int caps[210][210];
+//int cap[210][210];
+int flow[210][210];
+int source;
+int sink;
+int regNum;
+
+int path[210];
+int bfsFlow;
+
+void bfs(){
+bfsFlow = 0;
+	int pathCap[210];
+	for (int i = 0; i <= regNum * 2 + 2; ++i){
+		path[i] = -1;
+		pathCap[i] = 0;
+	}
+	path[source] = -2;
+	pathCap[source] = 99999999;
+	queue<int> q;
+	q.push(source);
+//	cout<<caps[7][10]<<" "<<flow[7][10]<<endl;
+	while (!q.empty()){
+		int node = q.front();
+		q.pop();
+		for (int i = 1; i <= regNum * 2 + 2; ++i)
+		{
+			if (caps[node][i] - flow[node][i]>0 && path[i] == -1){
+				path[i] = node;
+	//			cout << node << " " << i << " " << path[i] << endl;
+				pathCap[i] = (pathCap[node]<(caps[node][i] - flow[node][i]) ? pathCap[node] : (caps[node][i] - flow[node][i]));
+				if (i != sink)
+					q.push(i);
+				else{
+					bfsFlow = pathCap[sink];
+					return;
+				}
+
+			}
+		}
+	}
+	bfsFlow = 0;
+	return;
 
 }
-
-int change(char a){
-	if(a=='A')
-		return 10;
-	else if (a=='B')
-		return 11;
-	else if (a=='C')
-		return 12;
-	else if (a=='D')
-		return 13;
-	else if (a=='E')
-		return 14;
-	else if (a=='F')
-		return 15;
-	else
-		return (a - '0');
-}
-
-
 
 
 int main(){
 
 
-	string input;
 
+	while(cin >> regNum){
 
-	while(cin>>input){
-	stack<char> opStack;
-	
-	string postfix = "";
-	for (int i = 0; i<input.length(); i++){
-		char income = input[i];
+	memset(caps, 0, sizeof(caps));
+	memset(flow, 0, sizeof(flow));
 
-		if (income == '*' || income == '+'){
-			if(opStack.size()==0)
-				opStack.push(income);
-			else{
-			while (opStack.size() != 0 && opStack.top()!='(' && priority(opStack.top()) <= priority(income)){
-				postfix += opStack.top();
-				opStack.pop();
-			}
-			opStack.push(income);
-		}
-		}
-		else if (income == '(')
-			opStack.push(income);
-		else if (income == ')'){
-			while (opStack.top() != '('){
-				postfix += opStack.top();
-				opStack.pop();
-			}
-			opStack.pop();
-		}
-		
-		else
-			postfix += income;
+	for (int i = 1; i <= regNum; ++i)
+	{
+		int cap;
+		cin >> cap;
+		caps[2 * i][2 * i + 1] = cap;
+		caps[2 * i + 1][2 * i] = 0;
 	}
-
-	while (opStack.size() != 0){
-		postfix += opStack.top();
-		opStack.pop();
+	int linkNum;
+	cin >> linkNum;
+	while (linkNum--){
+		int st, des, cap;
+		cin >> st >> des >> cap;
+		caps[st * 2 + 1][des * 2] = cap;
+	//	caps[des * 2 + 1][st * 2] = 0;
 	}
+	int sourceNum, desNum;
+	cin >> sourceNum >> desNum;
 
- 
-	stack<int> oS;
-	oS.push(change(postfix[0]));
-	oS.push(change(postfix[1]));
-	for(int i=2; i<postfix.length(); i++){
-		char come = postfix[i];
-		if (come=='+'){
-			int t1 = oS.top();
-			oS.pop();
-			int t2 = oS.top();
-			oS.pop();
-			oS.push(t1+t2);
-			} 
-		else if (come== '*'){
-			int t1 = oS.top();
-			oS.pop();
-			int t2 = oS.top();
-			oS.pop();
-			oS.push(t1*t2);
+	source = 0;
+	while (sourceNum--){
+		int sr;
+		cin >> sr;
+		caps[0][sr * 2] = 0;
+		for (int i = 1; i <= regNum; ++i)
+		{
+			if (caps[sr * 2 + 1][2 * i]>0)
+				caps[0][sr * 2] += caps[sr * 2 + 1][2 * i];
 		}
 
-		else
-			oS.push(change(come));
+	}
+	sink = regNum * 2 + 2;
+	while (desNum--){
+		int de;
+		cin >> de;
+		caps[de * 2 + 1][regNum * 2 + 2] = 0;
+		for (int i = 1; i <= regNum; ++i)
+		{
+			if (caps[i * 2 + 1][de * 2]>0)
+				caps[de * 2 + 1][regNum * 2 + 2] += caps[i * 2 + 1][de * 2];
+		}
 
 	}
 
 
-	cout<<hex<<uppercase<<oS.top()<<endl;
+	int maxFlow = 0;
 
-}
+	//     cout<<source<<endl<<sink<<endl;
+	//     for (int i = 0; i <= regNum*2+2; ++i){
+	//         for (int j=0; j<=regNum*2+2; ++j)
+	// 		 {
+	// 		 	cout<<caps[i][j]<<" ";
+	// 		 } 
+	// 		 cout<<endl;
+	//     }
+	for (int i = 0; i <= regNum * 2 + 2; ++i){
+		for (int j = 0; j <= regNum * 2 + 2; ++j)
+			flow[j][i] = caps[i][j];
+	}
+
+	while (1){
+		bfs();
+	//	cout << bfsFlow << endl;
+		if (bfsFlow == 0)
+			break;
+	//	cout << path[0] << endl;
+		maxFlow += bfsFlow;
+		int v = sink;
+		while (v != source){
+			int u;
+			u = path[v];
+//			cout << v << " " << u << endl;
+			flow[u][v] = flow[u][v] + bfsFlow;
+			flow[v][u] = flow[v][u] - bfsFlow;
+//			cout << flow[u][v] << endl;
+//			cout << flow[v][u] << endl;
+			v = u;
+		}
+
+
+	}
+
+	cout << maxFlow<<endl;
+	}
+
+
+
+
 }

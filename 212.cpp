@@ -1,3 +1,14 @@
+/*****************************************
+ * (This comment block is added by the Judge System)
+ * Submission ID: 24437
+ * Submitted at:  2016-04-05 19:52:40
+ *
+ * User ID:       146
+ * Username:      53546028
+ * Problem ID:    212
+ * Problem Name:  Big Mod (UVA 374)
+ */
+
 #include <iostream>
 #include <string>
 
